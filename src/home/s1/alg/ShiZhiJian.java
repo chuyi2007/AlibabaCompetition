@@ -19,7 +19,7 @@ public class ShiZhiJian extends RecommendAlgorithm {
 		// TODO Auto-generated method stub
 		List<SingleRecord> recordList = super.history;
 		for (SingleRecord r : recordList) {
-			//r.get
+			//r.get add
 		}
 		Map<Long, Set<Integer>> recommendations = new HashMap<Long, Set<Integer>>();
 		return recommendations;
