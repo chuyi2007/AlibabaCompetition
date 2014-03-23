@@ -29,7 +29,7 @@ public abstract class RecommendAlgorithm {
     }
     
     public enum MonthList {
-    	April(4), May(5), June(6), July(7);
+    	April(4), May(5), June(6), July(7), August(8);
         private int code;
         
         private MonthList(int c) {

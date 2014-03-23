@@ -1,7 +1,4 @@
 package home.s1.app;
-
-import javax.swing.JFrame;
-
 public class RunGUI {
 
 	/**

@@ -65,9 +65,9 @@ public class NativeConnectionBased extends RecommendAlgorithm{
 				ActionList.Bookmark.getCode());
 	
 		
-		addRecommendations(0.12F, userBrandProb, recommendations);
-		addRecommendations(0.025F, userBrandProb1, recommendations);
-		addRecommendations(1.0F, userBrandProb2, recommendations);
+		addRecommendations(0.2F, userBrandProb, recommendations);
+		addRecommendations(0.0F, userBrandProb1, recommendations);
+		addRecommendations(0.0F, userBrandProb2, recommendations);
 
 		addRecommendations(0.0F, userBrandProb3, recommendations);
 		

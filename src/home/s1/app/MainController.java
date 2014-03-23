@@ -1,5 +1,9 @@
 package home.s1.app;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,12 +31,36 @@ public class MainController {
 		this.outputFilePath = outputFilePath;
 		this.trainingSize = trainingSize;
 		this.testSize = testSize;
-		history = new UserShoppingHistory(inputFilePath, 6);
+		history = new UserShoppingHistory(this.inputFilePath, 8);
 		algorithm = AlgorithmFactory.getAlgorithm(method, history.getTrainingSet());
 	}
 
+	public void writeFile(String outputFilePath, Map<Long, Set<Integer>> topRecommendations) {
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(outputFilePath));
+			Iterator<Long> userIter = topRecommendations.keySet().iterator();
+			while (userIter.hasNext()) {
+				long userId = userIter.next();
+				bw.write(userId + "\t");
+				Iterator<Integer> iter = topRecommendations.get(userId).iterator();
+				while (iter.hasNext()) {
+					bw.write(iter.next().toString());
+					if (iter.hasNext()) {
+						bw.write(",");
+					}
+				}
+				if (userIter.hasNext())
+					bw.write("\n");
+			}
+			bw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public String run() {
 		Map<Long, Set<Integer>> topRecommendations = algorithm.execute();
+		writeFile(this.outputFilePath, topRecommendations);
 		Map<Long, Set<Integer>> testSet = RecommendAlgorithm.getUserToItem(
 			UserShoppingHistory.getPurchaseRecords(history.getTestSet()));
 		

@@ -21,7 +21,7 @@ public class NaiveBayesian extends RecommendAlgorithm{
 	public Map<Long, Set<Integer>> execute() {
 		// TODO Auto-generated method stub
 		Map<Integer, Map<Integer, Float>> actionMap 
-			= getActionFloat(super.history, ActionList.Purchase.getCode(), 7, 0.01F);
+			= getActionFloat(super.history, ActionList.Purchase.getCode(), 7, 0F);
 		
 		Map<Long, Set<Integer>> recommendations
 			= new HashMap<Long, Set<Integer>>();

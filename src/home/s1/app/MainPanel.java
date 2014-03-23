@@ -86,7 +86,7 @@ public class MainPanel extends JPanel {
 				add(inputButton, gbc_inputButton);
 		
 				txtOutputFilePath = new JTextField();
-		txtOutputFilePath.setText("Output File Path ...");
+		txtOutputFilePath.setText("/Users/Ryan/Documents/Dropbox/aliCompetition/data/t_alibaba_recommendation.txt");
 		GridBagConstraints gbc_txtOutputFilePath = new GridBagConstraints();
 		gbc_txtOutputFilePath.gridwidth = 3;
 		gbc_txtOutputFilePath.fill = GridBagConstraints.BOTH;
