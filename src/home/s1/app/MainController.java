@@ -31,7 +31,7 @@ public class MainController {
 		this.outputFilePath = outputFilePath;
 		this.trainingSize = trainingSize;
 		this.testSize = testSize;
-		history = new UserShoppingHistory(this.inputFilePath, 8);
+		history = new UserShoppingHistory(this.inputFilePath, 6);
 		algorithm = AlgorithmFactory.getAlgorithm(method, history.getTrainingSet());
 	}
 

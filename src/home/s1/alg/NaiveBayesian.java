@@ -23,6 +23,9 @@ public class NaiveBayesian extends RecommendAlgorithm{
 		Map<Integer, Map<Integer, Float>> actionMap 
 			= getActionFloat(super.history, ActionList.Purchase.getCode(), 7, 0F);
 		
+		for (int key : actionMap.keySet()) {
+			//actionMap.get(key);
+		}
 		Map<Long, Set<Integer>> recommendations
 			= new HashMap<Long, Set<Integer>>();
 		RecommendAlgorithm algorithm = new NativeConnectionBased(super.history);
