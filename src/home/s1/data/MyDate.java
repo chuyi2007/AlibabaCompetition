@@ -1,12 +1,17 @@
 package home.s1.data;
 
-public class MyDate {
+public class MyDate implements Comparable<MyDate> {
 	private int month;
 	private int day;
 	public MyDate(int month, int day) {
 		super();
 		this.setMonth(month);
 		this.setDay(day);
+	}
+	public MyDate(MyDate date) {
+		super();
+		this.setMonth(date.getMonth());
+		this.setDay(date.getDay());
 	}
 	public int getMonth() {
 		return month;
@@ -63,5 +68,15 @@ public class MyDate {
 		int newDay = (day + this.day) % 30;
 		int newMonth = this.month + (day + this.day) / 30;
 		return new MyDate(newMonth, newDay);
+	}
+	@Override
+	public int compareTo(MyDate other) {
+		// TODO Auto-generated method stub
+		if (this.before(other)) {
+			return -1;
+		}
+		else {
+			return 1;
+		}
 	}
 }
