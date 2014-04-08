@@ -231,7 +231,7 @@ public class FeatureExtraction extends RecommendAlgorithm{
 //				getItemSimilarity1(itemByUsers(totalRecords, ActionList.Purchase.getCode()));
 //		
 		Map<Long, Set<Integer>> userMustBuy = getUserItemActions(totalRecords,
-				new MyDate(4, 1), new MyDate(7, 1), 7);
+				new MyDate(4, 1), new MyDate(7, 1), 25);
 		
 		Map<Long, Map<Integer, List<MyDate>>> userPurchaseToDate
 			= getUserActions(totalRecords, ActionList.Purchase.getCode());
@@ -289,43 +289,53 @@ public class FeatureExtraction extends RecommendAlgorithm{
 //						recommendations.get(userId).add(itemId);
 //					}
 					//else 
-//					if (userPurchaseToDate.containsKey(userId)
-//							&& userPurchaseToDate.get(userId).containsKey(itemId)
-//							&& userPurchaseToDate.get(userId).get(itemId).size() > 2) {
-//						recommendations.get(userId).add(itemId);
-//					}
+					if (userPurchaseToDate.containsKey(userId)
+							&& userPurchaseToDate.get(userId).containsKey(itemId)) {
+						List<MyDate> dateList = userPurchaseToDate.get(userId).get(itemId);
+						int size = dateList.size();
+						MyDate lastDay = dateList.get(size - 1);
+						if (size > 1)
+							recommendations.get(userId).add(itemId);
+						if (new MyDate(7, 1).before(lastDay))
+							recommendations.get(userId).add(itemId);
+					}
 					
 					if (userClickToDate.containsKey(userId)
 							&& userClickToDate.get(userId).containsKey(itemId)) {
 						List<MyDate> dateList = userClickToDate.get(userId).get(itemId);
 						int size = dateList.size();
 						MyDate lastDay = dateList.get(size - 1);
-						if (size > 1 && new MyDate(6, 15).before(lastDay))
+						if (size > 2 && new MyDate(7, 15).before(lastDay))
 							recommendations.get(userId).add(itemId);
 					}
+					
+					if (prob[0] > 0.16 && counts[0] > 3) {
+						recommendations.get(userId).add(itemId);
+					}
+					
 //					if (common4.containsKey(itemId) && common4.get(itemId) < 0.1f) {
 //						recommendations.get(userId).add(itemId);					
 //					}
-					if (userMustBuy.containsKey(userId) &&
-							userMustBuy.get(userId).contains(itemId)
-							&& counts[1] > 0) {
-						recommendations.get(userId).add(itemId);
-//						if (itemSimilarity.containsKey(itemId)) {
-//							for (int itemId2 : itemSimilarity.get(itemId).keySet()) {
-//								if (itemSimilarity.get(itemId).get(itemId2) 
-//										> 0.2) {
-//										//* counts[1] >= 0) {
-//									recommendations.get(userId).add(itemId2);
-//								}
-//							}
-//						}
-					}
+//					if (userMustBuy.containsKey(userId) &&
+//							userMustBuy.get(userId).contains(itemId)
+//							&& counts[1] > 0) {
+//						recommendations.get(userId).add(itemId);
+////						if (itemSimilarity.containsKey(itemId)) {
+////							for (int itemId2 : itemSimilarity.get(itemId).keySet()) {
+////								if (itemSimilarity.get(itemId).get(itemId2) 
+////										> 0.2) {
+////										//* counts[1] >= 0) {
+////									recommendations.get(userId).add(itemId2);
+////								}
+////							}
+////						}
+//					}
 					
 					
 					
 //					if (userMustClick.containsKey(userId) &&
 //							userMustClick.get(userId).contains(itemId)
-//							&& counts[0] > 0) {
+//							&& counts[0] > 1) {
 //						recommendations.get(userId).add(itemId);
 //					}
 					
@@ -333,8 +343,8 @@ public class FeatureExtraction extends RecommendAlgorithm{
 //							userMustAction.get(userId).contains(itemId)) {
 //						recommendations.get(userId).add(itemId);
 //					}
-//					
-//					
+					
+					
 //					int sum = 0;
 //					for (int c : counts)
 //						sum += c;
@@ -344,19 +354,19 @@ public class FeatureExtraction extends RecommendAlgorithm{
 //						recommendations.get(userId).add(itemId);
 //					}
 //					else 
-						if (counts[1] > 0 && mustBuy.contains(itemId)
-							) {
-						//&& userMustAction.containsKey(userId)) {
-						recommendations.get(userId).add(itemId);
-					}
-					else if (counts[1] > 1) {
-						recommendations.get(userId).add(itemId);
-					}
-					else if (mustClick.containsKey(itemId) 
-							&& mustClick.get(itemId)
-							* counts[0] > 1) {
-						recommendations.get(userId).add(itemId);
-					}
+//						if (counts[1] > 0 && mustBuy.contains(itemId)
+//							) {
+//						//&& userMustAction.containsKey(userId)) {
+//						recommendations.get(userId).add(itemId);
+//					}
+//					else if (counts[1] > 1) {
+//						recommendations.get(userId).add(itemId);
+//					}
+//					else if (mustClick.containsKey(itemId) 
+//							&& mustClick.get(itemId)
+//							* counts[0] > 1) {
+//						recommendations.get(userId).add(itemId);
+//					}
 //				}
 			}
 		}
@@ -372,16 +382,18 @@ public class FeatureExtraction extends RecommendAlgorithm{
 		Map<Long, Map<Integer, List<MyDate>>> map
 		= new HashMap<Long, Map<Integer, List<MyDate>>>();
 		for (SingleRecord r : recordList) {
-			if (!map.containsKey(r.getUserId())) {
-				map.put(r.getUserId(), new HashMap<Integer, List<MyDate>>());
-			}
-			if (!map.get(r.getUserId()).containsKey(r.getItemId())) {
-				List<MyDate> dates = new ArrayList<MyDate>();
-				dates.add(r.getDate());
-				map.get(r.getUserId()).put(r.getItemId(), dates);
-			}
-			else if (!map.get(r.getUserId()).get(r.getItemId()).contains(r.getDate())) {
-				map.get(r.getUserId()).get(r.getItemId()).add(r.getDate());
+			if (r.getAction() == action) {
+				if (!map.containsKey(r.getUserId())) {
+					map.put(r.getUserId(), new HashMap<Integer, List<MyDate>>());
+				}
+				if (!map.get(r.getUserId()).containsKey(r.getItemId())) {
+					List<MyDate> dates = new ArrayList<MyDate>();
+					dates.add(r.getDate());
+					map.get(r.getUserId()).put(r.getItemId(), dates);
+				}
+				else if (!map.get(r.getUserId()).get(r.getItemId()).contains(r.getDate())) {
+					map.get(r.getUserId()).get(r.getItemId()).add(r.getDate());
+				}
 			}
 		}
 		
@@ -410,9 +422,10 @@ public class FeatureExtraction extends RecommendAlgorithm{
 			actionsCounts.add(userTotalActionCountInTime(preRecords));
 		}
 		
-		for (Map<Long, Map<Integer, Integer[]>> map1 : actionsCounts) {
-			for (Map<Long, Map<Integer, Integer[]>> map2 : actionsCounts) {
-				if (map1.size() > 0 && map1 != map2) {
+		for (int i = 0; i < actionsCounts.size(); ++i) {
+			Map<Long, Map<Integer, Integer[]>> map1 = actionsCounts.get(i);
+			for (int j = i + 1; j < actionsCounts.size(); ++j) {
+				Map<Long, Map<Integer, Integer[]>> map2 = actionsCounts.get(j);
 				for (long userId : map1.keySet()) {
 					if (map2.containsKey(userId)) {
 						for (int itemId : map1.get(userId).keySet()) {
@@ -431,7 +444,6 @@ public class FeatureExtraction extends RecommendAlgorithm{
 							}
 						}
 					}
-				}
 				}
 			}
 		}
