@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import home.s1.alg.FeatureExtraction;
+import home.s1.alg.LastDayImportance;
 import home.s1.alg.NaiveBayesian;
 import home.s1.alg.NaiveCollaborativeFiltering;
 import home.s1.alg.NativeConnectionBased;
@@ -21,7 +22,6 @@ import home.s1.data.UserShoppingHistory;
 public class MainController {
 	private String inputFilePath;
 	private String outputFilePath;
-	private int trainingSize;
 	private RecommendAlgorithm algorithm;
 	private UserShoppingHistory history;
 	
@@ -29,7 +29,6 @@ public class MainController {
 			String outputFilePath, int trainingSize, MLMethods method) {
 		this.inputFilePath = inputFilePath;
 		this.outputFilePath = outputFilePath;
-		this.trainingSize = trainingSize;
 		history = new UserShoppingHistory(this.inputFilePath, trainingSize);
 		algorithm = AlgorithmFactory.getAlgorithm(method, history.getTrainingSet());
 	}
@@ -114,6 +113,9 @@ class AlgorithmFactory {
 		}
 		else if (MLMethods.FeatureExtraction.equals(method)) {
 			return new FeatureExtraction(trainingSet);
+		}
+		else if (MLMethods.LastDayImportance.equals(method)) {
+			return new LastDayImportance(trainingSet);
 		}
 		return null;
 	}
