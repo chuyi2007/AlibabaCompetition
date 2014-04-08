@@ -65,11 +65,11 @@ public class NativeConnectionBased extends RecommendAlgorithm{
 				ActionList.Bookmark.getCode());
 	
 		
-		addRecommendations(0.2F, userBrandProb, recommendations);
+		addRecommendations(0.9F, userBrandProb, recommendations);
 		addRecommendations(0.0F, userBrandProb1, recommendations);
-		addRecommendations(0.0F, userBrandProb2, recommendations);
+		addRecommendations(0.2F, userBrandProb2, recommendations);
 
-		addRecommendations(0.0F, userBrandProb3, recommendations);
+		addRecommendations(0.2F, userBrandProb3, recommendations);
 		
 //		List<Map<Long, Map<Integer, Float>>> userBrandProbList
 //		= getBrandProbPerMonth(super.history, ActionList.Click.getCode(), new int[] {4, 5, 6});
