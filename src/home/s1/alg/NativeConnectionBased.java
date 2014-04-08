@@ -65,11 +65,11 @@ public class NativeConnectionBased extends RecommendAlgorithm{
 				ActionList.Bookmark.getCode());
 	
 		
-		addRecommendations(0.2F, userBrandProb, recommendations);
-		addRecommendations(0.0F, userBrandProb1, recommendations);
-		addRecommendations(0.0F, userBrandProb2, recommendations);
+		addRecommendations(0.06F, userBrandProb, recommendations);
+		addRecommendations(0F, userBrandProb1, recommendations);
+		addRecommendations(1F, userBrandProb2, recommendations);
 
-		addRecommendations(0.0F, userBrandProb3, recommendations);
+		addRecommendations(1F, userBrandProb3, recommendations);
 		
 //		List<Map<Long, Map<Integer, Float>>> userBrandProbList
 //		= getBrandProbPerMonth(super.history, ActionList.Click.getCode(), new int[] {4, 5, 6});
@@ -122,6 +122,7 @@ public class NativeConnectionBased extends RecommendAlgorithm{
 		}
 		return actionCount;
 	}
+	
 	//p(i, j) is the stickiness from user i to brand j per month
 	private Map<Long, Map<Integer, Float>> getBrandProb(List<SingleRecord> recordList,
 			int action) {
@@ -149,13 +150,14 @@ public class NativeConnectionBased extends RecommendAlgorithm{
 		= new HashMap<Long, Map<Integer, Float>>();
 		for (long userId : userBrandSum.keySet()) {
 			for (int itemId : userBrandSum.get(userId).keySet()) {
-				float fraction = userBrandSum.get(userId).get(itemId)
+				Float count = userBrandSum.get(userId).get(itemId);
+				float fraction = count
 						/ actionCount.get(userId);
 				if (!userBrandProb.containsKey(userId)) {
 					userBrandProb.put(userId, new HashMap<Integer, Float>());
 				}
-				userBrandProb.get(userId).remove(itemId);
-				userBrandProb.get(userId).put(itemId, fraction);
+				if (count > 1)
+					userBrandProb.get(userId).put(itemId, fraction);
 			}
 		}
 		return userBrandProb;

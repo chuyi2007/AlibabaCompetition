@@ -10,7 +10,7 @@ import java.util.Set;
 
 public abstract class RecommendAlgorithm {
 	public enum MLMethods{
-		NaiveColloborativeFiltering, NaiveConnectionBased, NaiveBayesian, Shizhijian;
+		NaiveColloborativeFiltering, NaiveConnectionBased, NaiveBayesian, Shizhijian, FeatureExtraction;
 	}
 	
     public enum ActionList

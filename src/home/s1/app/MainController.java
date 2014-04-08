@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import home.s1.alg.FeatureExtraction;
 import home.s1.alg.NaiveBayesian;
 import home.s1.alg.NaiveCollaborativeFiltering;
 import home.s1.alg.NativeConnectionBased;
@@ -21,17 +22,15 @@ public class MainController {
 	private String inputFilePath;
 	private String outputFilePath;
 	private int trainingSize;
-	private int testSize;
 	private RecommendAlgorithm algorithm;
 	private UserShoppingHistory history;
 	
 	public MainController(String inputFilePath,
-			String outputFilePath, int trainingSize, int testSize, MLMethods method) {
+			String outputFilePath, int trainingSize, MLMethods method) {
 		this.inputFilePath = inputFilePath;
 		this.outputFilePath = outputFilePath;
 		this.trainingSize = trainingSize;
-		this.testSize = testSize;
-		history = new UserShoppingHistory(this.inputFilePath, 6);
+		history = new UserShoppingHistory(this.inputFilePath, trainingSize);
 		algorithm = AlgorithmFactory.getAlgorithm(method, history.getTrainingSet());
 	}
 
@@ -67,15 +66,19 @@ public class MainController {
 		double match = 0;
 		double total = 0;
 		for (long userId : testSet.keySet()) {
-			for (int itemId : testSet.get(userId)) {
-				if (topRecommendations.containsKey(userId)
-						&& topRecommendations.get(userId).contains(itemId)) {
-					++match;
+			//if (topRecommendations.containsKey(userId)) {
+				for (int itemId : testSet.get(userId)) {
+					if (topRecommendations.containsKey(userId)
+							&& topRecommendations.get(userId).contains(itemId)) {
+						++match;
+					}
+					++total;
 				}
-				++total;
-			}
+			//}
 		}
 		String result = "";
+		result += "total match: " + match + "\n";
+		result += "total actual buy: " + total + "\n";
 		double recall = match / total;
 		result += "recall is : " + recall + "\n";
 		total = 0;
@@ -86,6 +89,7 @@ public class MainController {
 		}
 		
 		double precision = match / total;
+		result += "total predict buy: " + total + "\n";
 		result += "precision is : " + precision + "\n";
 		
 		result += "f1 score is : " + 2 * recall * precision / (recall + precision) + "\n";
@@ -107,6 +111,9 @@ class AlgorithmFactory {
 		}
 		else if (MLMethods.Shizhijian.equals(method)){
 			return new ShiZhiJian(trainingSet);
+		}
+		else if (MLMethods.FeatureExtraction.equals(method)) {
+			return new FeatureExtraction(trainingSet);
 		}
 		return null;
 	}

@@ -33,7 +33,6 @@ public class MainPanel extends JPanel {
 	private JTextField txtInputFilePath;
 	private JTextField txtOutputFilePath;
 	private JTextField trainingSize;
-	private JTextField testSize;
 	private JComboBox comboBox;
 	private JTextArea textArea;
 	
@@ -51,10 +50,6 @@ public class MainPanel extends JPanel {
 	
 	public int getTrainingSize() {
 		return Integer.parseInt(trainingSize.getText());
-	}
-	
-	public int getTestSize() {
-		return Integer.parseInt(testSize.getText());
 	}
 	
 	public MainPanel() {
@@ -120,7 +115,7 @@ public class MainPanel extends JPanel {
 		gbc_label_2.gridy = 2;
 		add(percentageLabel, gbc_label_2);
 
-		JLabel TrainingSetLabel = new JLabel("Training Set Percentage:");
+		JLabel TrainingSetLabel = new JLabel("Training Months (inclusive upper bound)");
 		GridBagConstraints gbc_lblInputFilePath = new GridBagConstraints();
 		gbc_lblInputFilePath.anchor = GridBagConstraints.EAST;
 		gbc_lblInputFilePath.insets = new Insets(0, 0, 5, 5);
@@ -130,7 +125,7 @@ public class MainPanel extends JPanel {
 
 		trainingSize = new JTextField();
 		trainingSize.setHorizontalAlignment(SwingConstants.CENTER);
-		trainingSize.setText("60");
+		trainingSize.setText("6");
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.insets = new Insets(0, 0, 5, 5);
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
@@ -140,27 +135,6 @@ public class MainPanel extends JPanel {
 		trainingSize.setColumns(10);
 		AbstractDocument ad = (AbstractDocument) trainingSize.getDocument();
 		ad.setDocumentFilter(new MyDocumentFilter());
-		
-
-		JLabel TestSetLabel = new JLabel("Test Set Percentage: ");
-		GridBagConstraints gbc_lblOutputFilePath = new GridBagConstraints();
-		gbc_lblOutputFilePath.anchor = GridBagConstraints.EAST;
-		gbc_lblOutputFilePath.insets = new Insets(0, 0, 5, 5);
-		gbc_lblOutputFilePath.gridx = 2;
-		gbc_lblOutputFilePath.gridy = 4;
-		add(TestSetLabel, gbc_lblOutputFilePath);
-
-		testSize = new JTextField();
-		testSize.setHorizontalAlignment(SwingConstants.CENTER);
-		testSize.setText("40");
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.gridx = 3;
-		gbc_textField_1.gridy = 4;
-		add(testSize, gbc_textField_1);
-		testSize.setColumns(10);
-		ad = (AbstractDocument) testSize.getDocument();
 		ad.setDocumentFilter(new MyDocumentFilter());
 		
 		comboBox = new JComboBox(RecommendAlgorithm.MLMethods.values());
@@ -292,7 +266,7 @@ public class MainPanel extends JPanel {
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
 			MainController mc = new MainController(getInputFilePath(),
-					getOutputFilePath(), getTrainingSize(), getTestSize(), getMethod());
+					getOutputFilePath(), getTrainingSize(), getMethod());
 			String result = mc.run();
 			textArea.setText(result);
 		}

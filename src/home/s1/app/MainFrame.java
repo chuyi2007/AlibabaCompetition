@@ -34,8 +34,4 @@ public class MainFrame extends JFrame {
 	public int getTrainingSize() {
 		return myPanel.getTrainingSize();
 	}
-	
-	public int getTestSize() {
-		return myPanel.getTestSize();
-	}
 }
